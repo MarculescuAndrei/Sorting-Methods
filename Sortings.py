@@ -1,4 +1,3 @@
-from math import log10
 from random import randint
 
 Sorting = input("The sorting method is: ")
