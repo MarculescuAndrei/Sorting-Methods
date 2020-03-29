@@ -5,11 +5,15 @@ How it works:
 
 Choose the preferred sorting method : Quicksort, Bubble Sort, Count Sort, Merge Sort, Radix Sort ( you have to type them as they are here)
 
+__________________________________
+
 The program will generate an array using random numbers.
 
 Choose the largest possible number from the array.
 
 Choose the number of elements the array will.
+
+__________________________________
 
 Output :
  
