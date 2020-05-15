@@ -1,6 +1,5 @@
+from math import log10
 from random import randint
-
-Sorting = input("The sorting method is: ")
 
 import timeit
 
@@ -67,32 +66,30 @@ def countSort(array, max):
 
 #______________RadixSort______________#
 
-def countSortDigits(array, cif):
-    out = [0] * len(array)
-    fq = [0] * 10
+def countSortRadix(array,base,pos):
+
+    countArray = [0]*base
+    outputArray = [0]*len(array)
     for i in range(len(array)):
-        ind = array[i] // cif
-        fq[ind % 10] = fq[ind % 10] + 1
-    for i in range(1, 10):
-        fq[i] += fq[i - 1]
+        countArray[array[i] // (base**pos) % base] += 1
+    for i in range (1,base):
+        countArray[i] = countArray[i] + countArray[i-1]
+    for i in range(len(array)-1,-1,-1):
+        outputArray[countArray[(array[i] // base ** pos) % base] -1 ] = array[i]
+        countArray[((array[i] // base ** pos) % base) % base] -= 1
+    return outputArray
 
-    i = len(array) - 1
-    while i >= 0:
-        ind = array[i] // cif
-        out[fq[ind % 10] - 1] = array[i]
-        fq[ind % 10] = fq[ind % 10] - 1
-        i = i - 1
+def radixSort(array,base):
 
-    for i in range(0, len(array)):
-        array[i] = out[i]
-
-
-def radixSort(array):
-    m = max(array)
-    cif = 1
-    while m / cif > 0:
-        countSortDigits(array, cif)
-        cif = cif * 10
+    if len(array)==0:
+        return []
+    valMax = max(array)
+    poss = 0
+    while(valMax):
+        valMax=valMax // base
+        poss += 1
+    for pos in range(poss):
+        array = countSortRadix(array,base,pos)
     return array
 
 #______________MergeSort______________#
@@ -131,41 +128,77 @@ def mergeSort(array):
 
 # ______________Main______________#
 
-
 NrMax = int(input("The biggest number from the array is: "))
 NrArray = int(input("The number of elements in the array is: "))
-array = l = [ randint(1, NrMax) for x in range(NrArray) ]
+array = aux = [ randint(1, NrMax) for x in range(NrArray) ]
 
 arrayTest = array
-start = timeit.default_timer()
 
-if Sorting == "Quicksort":
-    quickSort(array, 0, len(array) - 1)
-    print(array)
-
-elif Sorting == "Bubble Sort":
-    if len(array) > 3000:
-        print("The sorting would take too long with this method")
-    else:
-        print(bubbleSort(array))
-
-elif Sorting == "Count Sort":
-    if max(array) > 1000000:
-        print("The sorting would take too long with this method")
-    else:
-        countSort(array, max(array))
+OK = 1
+while OK == 1:
+    Sorting = input("The sorting method is: ")
+    if Sorting == "Quicksort":
+        start = timeit.default_timer()
+        quickSort(array, 0, len(array) - 1)
+        stop = timeit.default_timer()
+        execution_time = stop - start
+        print("Program Executed in %s" % execution_time)
+        sortingTest(array, arrayTest)
         print(array)
+        array = aux
+        print("-----------------------------")
 
-elif Sorting == "Radix Sort":
-    print(radixSort(array))
+    elif Sorting == "Bubble Sort":
+        if len(array) > 3000:
+            print("The sorting would take too long with this method")
+            print("-----------------------------")
+        else:
+            start = timeit.default_timer()
+            print(bubbleSort(array))
+            stop = timeit.default_timer()
+            execution_time = stop - start
+            print("Program Executed in %s" % execution_time)
+            sortingTest(array, arrayTest)
+            array = aux
+            print("-----------------------------")
 
-elif Sorting == "Merge Sort":
-    mergeSort(array)
-    print(array)
+    elif Sorting == "Count Sort":
+        if max(array) > 1000000:
+            print("The sorting would take too long with this method")
+            print("-----------------------------")
+        else:
+            start = timeit.default_timer()
+            countSort(array, max(array))
+            stop = timeit.default_timer()
+            print(array)
+            execution_time = stop - start
+            print("Program Executed in %s" % execution_time)
+            sortingTest(array, arrayTest)
+            array = aux
+            print("-----------------------------")
 
+    elif Sorting == "Radix Sort":
+        start = timeit.default_timer()
+        base = int(input("Specify the base: "))
+        print(radixSort(array, base))
+        stop = timeit.default_timer()
+        execution_time = stop - start
+        print("Program Executed in %s" % execution_time)
+        sortingTest(array, arrayTest)
+        array = aux
+        print("-----------------------------")
 
-stop = timeit.default_timer()
-execution_time = stop - start
+    elif Sorting == "Merge Sort":
+        start = timeit.default_timer()
+        mergeSort(array)
+        stop = timeit.default_timer()
+        print(array)
+        execution_time = stop - start
+        print("Program Executed in %s" % execution_time)
+        sortingTest(array, arrayTest)
+        array = aux
+        print("-----------------------------")
 
-sortingTest(array, arrayTest)
-print("Program Executed in %s" % execution_time)
+    elif Sorting == "Exit":
+        OK = 0
+
