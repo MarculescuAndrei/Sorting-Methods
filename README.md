@@ -11,7 +11,7 @@ The program will generate an array using random numbers.
 
 Choose the largest possible number from the array.
 
-Choose the number of elements the array will.
+Choose the number of elements the array will have.
 
 __________________________________
 
