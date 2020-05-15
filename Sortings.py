@@ -1,8 +1,8 @@
 from math import log10
 from random import randint
-
 import timeit
 
+// Testing Function
 def sortingTest(array1, array2):
     array2.sort()
     if array1 == array2 :
